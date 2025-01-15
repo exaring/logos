@@ -63,9 +63,17 @@
             </select>
         </div>
         <button onclick="generateSignature()">Generate Signature</button>
+        
+        
     </div>
 
-    <div id="signature-output" class="output" contenteditable="true"></div>
+    <h3>Signature</h3>
+    <div id="signature-output" class="output" contenteditable="true"></div><br>
+    <button onclick="copyToClipboardRich('signature-output')">Copy</button>
+    <h3>HTML Code</h2>
+    <div id="html-output" class="output" contenteditable="true" style="white-space: pre-wrap; font-size: 10px; line-height: 1.2;"></div><br>
+    <button onclick="copyToClipboard('html-output')">Copy</button>
+
 
     <script>
         function generateSignature() {
@@ -114,7 +122,8 @@
             const signatureHTML = `
                 <div style=\"font-family: Arial, sans-serif; font-size: 12px; line-height: 1.2;\">
                     <div style=\"margin: 0;\">
-                        <span style=\"font-size: 14px; font-weight: bold;\">--<br>${firstname} ${lastname}</span> ${titleDepartment ? '| ' + titleDepartment : ''}<br>
+                        --<br>
+                        <span style=\"font-size: 14px; font-weight: bold;\">${firstname} ${lastname}</span> ${titleDepartment ? '| ' + titleDepartment : ''}<br>
                         <a href=\"mailto:${email}\" style=\"color: #000000; text-decoration: none;\">${email}</a><br>
                         ${phoneLink}
                     </div>
@@ -130,6 +139,30 @@
                 </div>
             `;
             document.getElementById('signature-output').innerHTML = signatureHTML;
+            document.getElementById('html-output').innerText = signatureHTML;
+        }
+    </script>
+    <script>
+        function copyToClipboard(elementId) {
+            const content = document.getElementById(elementId).innerText;
+            navigator.clipboard.writeText(content).then(() => {
+                alert('Content copied to clipboard!');
+            }).catch(err => {
+                alert('Failed to copy content: ' + err);
+            });
+        }
+        function copyToClipboardRich(elementId) {
+            const element = document.getElementById(elementId);
+            const html = element.outerHTML;
+
+            const clipboardItem = new ClipboardItem({ 
+                'text/html': new Blob([html], { type: 'text/html' }),
+                'text/plain': new Blob([element.innerText], { type: 'text/plain' })
+            });
+
+            navigator.clipboard.write([clipboardItem])
+                .then(() => alert('Content copied to clipboard!'))
+                .catch(error => alert('Failed to copy content: ' + error));
         }
     </script>
 </body>
