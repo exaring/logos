@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Signature Generator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .form-group {
+            margin-bottom: 10px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        .form-group input {
+            width: 100%;
+            padding: 5px;
+            box-sizing: border-box;
+        }
+        .output {
+            margin-top: 20px;
+            padding: 10px;
+            border: 1px solid #ccc;
+        }
+    </style>
+</head>
+<body>
+    <h1>Signature Generator</h1>
+    <div>
+        <div class="form-group">
+            <label for="firstname">First Name *</label>
+            <input type="text" id="firstname" required>
+        </div>
+        <div class="form-group">
+            <label for="lastname">Last Name *</label>
+            <input type="text" id="lastname" required>
+        </div>
+        <div class="form-group">
+            <label for="email">Email *</label>
+            <input type="email" id="email" required>
+        </div>
+        <div class="form-group">
+            <label for="title">Title (Software Engineer, Marketing Manager, Senior Customer Specialist, etc.)</label>
+            <input type="text" id="title">
+        </div>
+        <div class="form-group">
+            <label for="department">Department (Marketing, Engineering, Customer Support, Legal, HR, etc.)</label>
+            <input type="text" id="department">
+        </div>
+        <div class="form-group">
+            <label for="phone">Phone (+49 171 12345678)</label>
+            <input type="tel" id="phone">
+        </div>
+        <div class="form-group">
+            <label for="language">Language</label>
+            <select id="language">
+                <option value="de">German</option>
+                <option value="en">English</option>
+            </select>
+        </div>
+        <button onclick="generateSignature()">Generate Signature</button>
+    </div>
+
+    <div id="signature-output" class="output" contenteditable="true"></div>
+
+    <script>
+        function generateSignature() {
+            const firstname = document.getElementById('firstname').value.trim();
+            const lastname = document.getElementById('lastname').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const title = document.getElementById('title').value.trim();
+            const department = document.getElementById('department').value.trim();
+            const phone = document.getElementById('phone').value.trim();
+            const language = document.getElementById('language').value.trim();
+
+            if (!firstname || !lastname || !email) {
+                alert('Please fill out the mandatory fields (First Name, Last Name, Email).');
+                return;
+            }
+
+            let titleDepartment = '';
+            if (title || department) {
+                titleDepartment = `<span style=\"color: gray;\">${title}${title && department ? ' - ' : ''}${department}</span>`;
+            }
+
+            let phoneLink = '';
+            if (phone) {
+                phoneLink = `<a href=\"tel:${phone.replace(/[^\d+]/g, '')}\" style=\"color: #000000; text-decoration: none;\">${phone}</a><br>`;
+            }
+
+            const germanFooter = `
+                <p style=\"margin: 0; font-size: 10px; color: gray;\">
+                    EXARING AG, Leopoldstraße 236, 80807 München<br>
+                    Vorstand: Christoph Bellmer, Markus Haertenstein, Robert Laier | Amtsgericht München, HRB 205601<br>
+                    Vorsitzender des Aufsichtsrats: Christoph Vilanek
+                </p>
+            `;
+
+            const englishFooter = `
+                <p style=\"margin: 0; font-size: 10px; color: gray;\">
+                    EXARING AG, Leopoldstrasse 236, 80807 Munich, Germany<br>
+                    Executive Board: Christoph Bellmer, Markus Haertenstein, Robert Laier | District Court of Munich, HRB 205601<br>
+                    Chairman of the Supervisory Board: Christoph Vilanek
+                </p>
+            `;
+
+                        const footer = language === 'de' ? germanFooter : englishFooter;
+
+
+            const signatureHTML = `
+                <div style=\"font-family: Arial, sans-serif; font-size: 12px; line-height: 1.2;\">
+                    <p style=\"margin: 0;\">
+                        <span style=\"font-size: 14px; font-weight: bold;\">--<br>${firstname} ${lastname}</span> ${titleDepartment ? '| ' + titleDepartment : ''}<br>
+                        <a href=\"mailto:${email}\" style=\"color: #000000; text-decoration: none;\">${email}</a><br>
+                        ${phoneLink}
+                    </p>
+                    <p style=\"margin: 5px 0;\">
+                        <img src=\"https://exaring.github.io/logos/logo.jpg\" 
+                             alt=\"waipu.tv Logo\" style=\"height: 26px; display: inline-block;\">
+                    </p>
+                    ${footer}
+                    <p style=\"margin: 5px 0; font-size: 10px;\">
+                        <a href=\"https://www.exaring.de\" style=\"color: #0000EE; text-decoration: none;\">www.exaring.de</a> | 
+                        <a href=\"https://www.waipu.tv\" style=\"color: #0000EE; text-decoration: none;\">www.waipu.tv</a>
+                    </p>
+                </div>
+            `;
+            document.getElementById('signature-output').innerHTML = signatureHTML;
+        }
+    </script>
+</body>
+</html>
