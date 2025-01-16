@@ -27,89 +27,89 @@
             border: 1px solid #ccc;
         }
     </style>
+    <script src="https://alcdn.msauth.net/browser/2.25.0/js/msal-browser.min.js"></script>
 </head>
 <body>
-    <h1>Signature Generator</h1>
-    <div>
-        <div class="form-group">
-            <label for="firstname">First Name *</label>
-            <input type="text" id="firstname" required>
-        </div>
-        <div class="form-group">
-            <label for="lastname">Last Name *</label>
-            <input type="text" id="lastname" required>
-        </div>
-        <div class="form-group">
-            <label for="email">Email *</label>
-            <input type="email" id="email" required>
-        </div>
-        <div class="form-group">
-            <label for="title">Title (Software Engineer, Marketing Manager, Senior Customer Specialist, etc.)</label>
-            <input type="text" id="title">
-        </div>
-        <div class="form-group">
-            <label for="department">Department (Marketing, Engineering, Customer Support, Legal, HR, etc.)</label>
-            <input type="text" id="department">
-        </div>
-        <div class="form-group">
-            <label for="phone">Phone (+49 171 12345678)</label>
-            <input type="tel" id="phone">
-        </div>
-        <div class="form-group">
-            <label for="language">Language</label>
-            <select id="language">
-                <option value="de">German</option>
-                <option value="en">English</option>
-            </select>
-        </div>
-        <button onclick="generateSignature()">Generate Signature</button>
-        
-        
+<h1>Signature Generator</h1>
+<div>
+    <div class="form-group">
+        <label for="firstname">First Name *</label>
+        <input type="text" id="firstname" required>
     </div>
-
-    <div id="signature-container" style="display: none;">
-        <h3>Signature</h3>
-        <div id="signature-output" class="output" contenteditable="true"></div><br>
-        <button id="copy-signature-button" onclick="copyToClipboardRich('signature-output')">Copy</button>
+    <div class="form-group">
+        <label for="lastname">Last Name *</label>
+        <input type="text" id="lastname" required>
     </div>
-    <div id="html-container" style="display: none;">
-        <h3>HTML Code</h3>
-        <div id="html-output" class="output" contenteditable="true" style="white-space: pre-wrap; font-size: 10px; line-height: 1.2;"></div><br>
-        <button id="copy-html-button" onclick="copyToClipboard('html-output')">Copy</button>
+    <div class="form-group">
+        <label for="email">Email *</label>
+        <input type="email" id="email" required>
     </div>
-
-    <div id="text-container" style="display: none;">
-        <h3>Text only</h3>
-        <div id="text-only-output" class="output" contenteditable="true" style="white-space: pre-wrap; font-size: 10px; line-height: 1.2;"></div><br>
-        <button id="copy-text-button" onclick="copyToClipboard('text-only-output')">Copy</button>
+    <div class="form-group">
+        <label for="title">Title (Software Engineer, Marketing Manager, Senior Customer Specialist, etc.)</label>
+        <input type="text" id="title">
     </div>
-    
-    <script>
-        function generateSignature() {
-            const firstname = document.getElementById('firstname').value.trim();
-            const lastname = document.getElementById('lastname').value.trim();
-            const email = document.getElementById('email').value.trim();
-            const title = document.getElementById('title').value.trim();
-            const department = document.getElementById('department').value.trim();
-            const phone = document.getElementById('phone').value.trim();
-            const language = document.getElementById('language').value.trim();
+    <div class="form-group">
+        <label for="department">Department (Marketing, Engineering, Customer Support, Legal, HR, etc.)</label>
+        <input type="text" id="department">
+    </div>
+    <div class="form-group">
+        <label for="phone">Phone (+49 171 12345678)</label>
+        <input type="tel" id="phone">
+    </div>
+    <div class="form-group">
+        <label for="language">Language</label>
+        <select id="language">
+            <option value="de">German</option>
+            <option value="en">English</option>
+        </select>
+    </div>
+    <button onclick="signIn()">Sign in with Office 365</button>
+    <button onclick="generateSignature()">Generate Signature</button>
+</div>
 
-            if (!firstname || !lastname || !email) {
-                alert('Please fill out the mandatory fields (First Name, Last Name, Email).');
-                return;
-            }
+<div id="signature-container" style="display: none;">
+    <h3>Signature</h3>
+    <div id="signature-output" class="output" contenteditable="true"></div><br>
+    <button id="copy-signature-button" onclick="copyToClipboardRich('signature-output')">Copy</button>
+</div>
+<div id="html-container" style="display: none;">
+    <h3>HTML Code</h3>
+    <div id="html-output" class="output" contenteditable="true" style="white-space: pre-wrap; font-size: 10px; line-height: 1.2;"></div><br>
+    <button id="copy-html-button" onclick="copyToClipboard('html-output')">Copy</button>
+</div>
 
-            let titleDepartment = '';
-            if (title || department) {
-                titleDepartment = `<span style=\"color: gray;\">${title}${title && department ? ' - ' : ''}${department}</span>`;
-            }
+<div id="text-container" style="display: none;">
+    <h3>Text only</h3>
+    <div id="text-only-output" class="output" contenteditable="true" style="white-space: pre-wrap; font-size: 10px; line-height: 1.2;"></div><br>
+    <button id="copy-text-button" onclick="copyToClipboard('text-only-output')">Copy</button>
+</div>
 
-            let phoneLink = '';
-            if (phone) {
-                phoneLink = `<a href=\"tel:${phone.replace(/[^\d+]/g, '')}\" style=\"color: #000000; text-decoration: none !important;\">${phone}</a><br>`;
-            }
+<script>
+    function generateSignature() {
+        const firstname = document.getElementById('firstname').value.trim();
+        const lastname = document.getElementById('lastname').value.trim();
+        const email = document.getElementById('email').value.trim();
+        const title = document.getElementById('title').value.trim();
+        const department = document.getElementById('department').value.trim();
+        const phone = document.getElementById('phone').value.trim();
+        const language = document.getElementById('language').value.trim();
 
-            const germanFooter = `
+        if (!firstname || !lastname || !email) {
+            alert('Please fill out the mandatory fields (First Name, Last Name, Email).');
+            return;
+        }
+
+        let titleDepartment = '';
+        if (title || department) {
+            titleDepartment = `<span style=\"color: gray;\">${title}${title && department ? ' - ' : ''}${department}</span>`;
+        }
+
+        let phoneLink = '';
+        if (phone) {
+            phoneLink = `<a href=\"tel:${phone.replace(/[^\d+]/g, '')}\" style=\"color: #000000; text-decoration: none !important;\">${phone}</a><br>`;
+        }
+
+        const germanFooter = `
                 <div style=\"margin: 0; font-size: 10px; color: gray;\">
                     EXARING AG, Leopoldstraße 236, 80807 München<br>
                     Vorstand: Christoph Bellmer, Markus Haertenstein, Robert Laier | Amtsgericht München, HRB 205601<br>
@@ -117,7 +117,7 @@
                 </div>
             `;
 
-            const englishFooter = `
+        const englishFooter = `
                 <div style=\"margin: 0; font-size: 10px; color: gray;\">
                     EXARING AG, Leopoldstrasse 236, 80807 Munich, Germany<br>
                     Executive Board: Christoph Bellmer, Markus Haertenstein, Robert Laier | District Court of Munich, HRB 205601<br>
@@ -125,10 +125,10 @@
                 </div>
             `;
 
-            const footer = language === 'de' ? germanFooter : englishFooter;
+        const footer = language === 'de' ? germanFooter : englishFooter;
 
 
-            const signatureHTML = `
+        const signatureHTML = `
                 <div style=\"font-family: Arial, sans-serif; font-size: 12px; line-height: 1.2;\">
                     <div style=\"margin: 0;\">
                         --<br>
@@ -137,48 +137,106 @@
                         ${phoneLink}
                     </div>
                     <div style=\"margin: 5px 0;\">
-                        <img src=\"https://exaring.github.io/logos/waipu.png\" 
+                        <img src=\"https://exaring.github.io/logos/waipu.png\"
                              alt=\"waipu.tv Logo\" style=\"height: 26px; display: inline-block;\">
                     </div>
                     ${footer}
                     <div style=\"margin: 5px 0; font-size: 10px;\">
-                        <a href=\"https://www.exaring.de\" style=\"color: #0000EE; text-decoration: none;\">www.exaring.de</a> | 
+                        <a href=\"https://www.exaring.de\" style=\"color: #0000EE; text-decoration: none;\">www.exaring.de</a> |
                         <a href=\"https://www.waipu.tv\" style=\"color: #0000EE; text-decoration: none;\">www.waipu.tv</a>
                     </div>
                 </div>
             `;
-            document.getElementById('signature-output').innerHTML = signatureHTML;
-            document.getElementById('signature-container').style.display = 'block';
-            document.getElementById('html-output').innerText = signatureHTML;
-            document.getElementById('html-container').style.display = 'block';
-            
-            const textOnlySignature = document.getElementById('signature-output').innerText;
-            document.getElementById('text-only-output').innerText = textOnlySignature;
-            document.getElementById('text-container').style.display = 'block';
-        }
-    </script>
-    <script>
-        function copyToClipboard(elementId) {
-            const content = document.getElementById(elementId).innerText;
-            navigator.clipboard.writeText(content).then(() => {
-                alert('Content copied to clipboard!');
-            }).catch(err => {
-                alert('Failed to copy content: ' + err);
-            });
-        }
-        function copyToClipboardRich(elementId) {
-            const element = document.getElementById(elementId);
-            const html = element.outerHTML;
+        document.getElementById('signature-output').innerHTML = signatureHTML;
+        document.getElementById('signature-container').style.display = 'block';
+        document.getElementById('html-output').innerText = signatureHTML;
+        document.getElementById('html-container').style.display = 'block';
 
-            const clipboardItem = new ClipboardItem({ 
-                'text/html': new Blob([html], { type: 'text/html' }),
-                'text/plain': new Blob([element.innerText], { type: 'text/plain' })
-            });
+        const textOnlySignature = document.getElementById('signature-output').innerText;
+        document.getElementById('text-only-output').innerText = textOnlySignature;
+        document.getElementById('text-container').style.display = 'block';
+    }
+</script>
+<script>
+    function copyToClipboard(elementId) {
+        const content = document.getElementById(elementId).innerText;
+        navigator.clipboard.writeText(content).then(() => {
+            alert('Content copied to clipboard!');
+        }).catch(err => {
+            alert('Failed to copy content: ' + err);
+        });
+    }
+    function copyToClipboardRich(elementId) {
+        const element = document.getElementById(elementId);
+        const html = element.outerHTML;
 
-            navigator.clipboard.write([clipboardItem])
-                .then(() => alert('Content copied to clipboard!'))
-                .catch(error => alert('Failed to copy content: ' + error));
-        }
-    </script>
+        const clipboardItem = new ClipboardItem({
+            'text/html': new Blob([html], { type: 'text/html' }),
+            'text/plain': new Blob([element.innerText], { type: 'text/plain' })
+        });
+
+        navigator.clipboard.write([clipboardItem])
+            .then(() => alert('Content copied to clipboard!'))
+            .catch(error => alert('Failed to copy content: ' + error));
+    }
+</script>
+<script>
+    const msalConfig = {
+        auth: {
+            clientId: "2a0d49d5-3f9a-4c80-8e21-4670bf6f53b3",
+            authority: "https://login.microsoftonline.com/exaring.de",
+            redirectUri: "https://exaring.github.io/logos/signature.html",
+        },
+    };
+
+    const loginRequest = {
+        scopes: ["User.Read"],
+    };
+
+    const msalInstance = new msal.PublicClientApplication(msalConfig);
+
+    function signIn() {
+        msalInstance.loginPopup(loginRequest)
+            .then(response => {
+                const account = msalInstance.getAllAccounts()[0];
+                if (account) {
+                    msalInstance.setActiveAccount(account);
+                    console.log("Signed in:", account);
+                    getUserData();
+                }
+            })
+            .catch(error => {
+                console.error("Login error:", error);
+            });
+    }
+
+    function getUserData() {
+        msalInstance.acquireTokenSilent(loginRequest)
+            .then(tokenResponse => {
+                fetch("https://graph.microsoft.com/v1.0/me?$select=givenName,surname,mail,jobTitle,department,mobilePhone", {
+                    headers: {
+                        Authorization: `Bearer ${tokenResponse.accessToken}`,
+                    },
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log("User Data:", data);
+                        document.getElementById("firstname").value = data.givenName || "";
+                        document.getElementById("lastname").value = data.surname || "";
+                        document.getElementById("email").value = data.mail || "";
+                        document.getElementById("title").value = data.jobTitle || "";
+                        document.getElementById("department").value = data.department || "";
+                        document.getElementById('phone').value = data.mobilePhone || "";
+                    })
+                    .catch(error => {
+                        console.error("Graph API error:", error);
+                    });
+            })
+            .catch(error => {
+                console.error("Token acquisition error:", error);
+            });
+    }
+</script>
+
 </body>
 </html>
