@@ -67,14 +67,23 @@
         
     </div>
 
-    <h3>Signature</h3>
-    <div id="signature-output" class="output" contenteditable="true"></div><br>
-    <button onclick="copyToClipboardRich('signature-output')">Copy</button>
-    <h3>HTML Code</h2>
-    <div id="html-output" class="output" contenteditable="true" style="white-space: pre-wrap; font-size: 10px; line-height: 1.2;"></div><br>
-    <button onclick="copyToClipboard('html-output')">Copy</button>
+    <div id="signature-container" style="display: none;">
+        <h3>Signature</h3>
+        <div id="signature-output" class="output" contenteditable="true"></div><br>
+        <button id="copy-signature-button" onclick="copyToClipboardRich('signature-output')">Copy</button>
+    </div>
+    <div id="html-container" style="display: none;">
+        <h3>HTML Code</h3>
+        <div id="html-output" class="output" contenteditable="true" style="white-space: pre-wrap; font-size: 10px; line-height: 1.2;"></div><br>
+        <button id="copy-html-button" onclick="copyToClipboard('html-output')">Copy</button>
+    </div>
 
-
+    <div id="text-container" style="display: none;">
+        <h3>Text only</h3>
+        <div id="text-only-output" class="output" contenteditable="true" style="white-space: pre-wrap; font-size: 10px; line-height: 1.2;"></div><br>
+        <button id="copy-text-button" onclick="copyToClipboard('text-only-output')">Copy</button>
+    </div>
+    
     <script>
         function generateSignature() {
             const firstname = document.getElementById('firstname').value.trim();
@@ -139,7 +148,13 @@
                 </div>
             `;
             document.getElementById('signature-output').innerHTML = signatureHTML;
+            document.getElementById('signature-container').style.display = 'block';
             document.getElementById('html-output').innerText = signatureHTML;
+            document.getElementById('html-container').style.display = 'block';
+            
+            const textOnlySignature = document.getElementById('signature-output').innerText;
+            document.getElementById('text-only-output').innerText = textOnlySignature;
+            document.getElementById('text-container').style.display = 'block';
         }
     </script>
     <script>
