@@ -4,239 +4,89 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Signature Generator</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
-        }
-        .form-group {
-            margin-bottom: 10px;
-        }
-        .form-group label {
-            display: block;
-            margin-bottom: 5px;
-        }
-        .form-group input {
-            width: 100%;
-            padding: 5px;
-            box-sizing: border-box;
-        }
         .output {
             margin-top: 20px;
             padding: 10px;
             border: 1px solid #ccc;
+            background-color: #f9f9f9;
         }
     </style>
     <script src="https://alcdn.msauth.net/browser/2.25.0/js/msal-browser.min.js"></script>
+    <script src="signature.js"></script>
 </head>
 <body>
-<h1>Signature Generator</h1>
-<div>
-    <div class="form-group">
-        <label for="firstname">First Name *</label>
-        <input type="text" id="firstname" required>
-    </div>
-    <div class="form-group">
-        <label for="lastname">Last Name *</label>
-        <input type="text" id="lastname" required>
-    </div>
-    <div class="form-group">
-        <label for="email">Email *</label>
-        <input type="email" id="email" required>
-    </div>
-    <div class="form-group">
-        <label for="title">Title (Software Engineer, Marketing Manager, Senior Customer Specialist, etc.)</label>
-        <input type="text" id="title">
-    </div>
-    <div class="form-group">
-        <label for="department">Department (Marketing, Engineering, Customer Support, Legal, HR, etc.)</label>
-        <input type="text" id="department">
-    </div>
-    <div class="form-group">
-        <label for="phone">Phone (+49 171 12345678)</label>
-        <input type="tel" id="phone">
-    </div>
-    <div class="form-group">
-        <label for="language">Language</label>
-        <select id="language">
-            <option value="de">German</option>
-            <option value="en">English</option>
-        </select>
-    </div>
-    <button onclick="signIn()">Sign in with Office 365</button>
-    <button onclick="generateSignature()">Generate Signature</button>
-</div>
-
-<div id="signature-container" style="display: none;">
-    <h3>Signature</h3>
-    <div id="signature-output" class="output" contenteditable="true"></div><br>
-    <button id="copy-signature-button" onclick="copyToClipboardRich('signature-output')">Copy</button>
-</div>
-<div id="html-container" style="display: none;">
-    <h3>HTML Code</h3>
-    <div id="html-output" class="output" contenteditable="true" style="white-space: pre-wrap; font-size: 10px; line-height: 1.2;"></div><br>
-    <button id="copy-html-button" onclick="copyToClipboard('html-output')">Copy</button>
-</div>
-
-<div id="text-container" style="display: none;">
-    <h3>Text only</h3>
-    <div id="text-only-output" class="output" contenteditable="true" style="white-space: pre-wrap; font-size: 10px; line-height: 1.2;"></div><br>
-    <button id="copy-text-button" onclick="copyToClipboard('text-only-output')">Copy</button>
-</div>
-
-<script>
-    function generateSignature() {
-        const firstname = document.getElementById('firstname').value.trim();
-        const lastname = document.getElementById('lastname').value.trim();
-        const email = document.getElementById('email').value.trim();
-        const title = document.getElementById('title').value.trim();
-        const department = document.getElementById('department').value.trim();
-        const phone = document.getElementById('phone').value.trim();
-        const language = document.getElementById('language').value.trim();
-
-        if (!firstname || !lastname || !email) {
-            alert('Please fill out the mandatory fields (First Name, Last Name, Email).');
-            return;
-        }
-
-        let titleDepartment = '';
-        if (title || department) {
-            titleDepartment = `<span style=\"color: gray;\">${title}${title && department ? ' - ' : ''}${department}</span>`;
-        }
-
-        let phoneLink = '';
-        if (phone) {
-            phoneLink = `<a href=\"tel:${phone.replace(/[^\d+]/g, '')}\" style=\"color: #000000; text-decoration: none !important;\">${phone}</a><br>`;
-        }
-
-        const germanFooter = `
-                <div style=\"margin: 0; font-size: 10px; color: gray;\">
-                    EXARING AG, Leopoldstraße 236, 80807 München<br>
-                    Vorstand: Christoph Bellmer, Markus Haertenstein, Robert Laier | Amtsgericht München, HRB 205601<br>
-                    Vorsitzender des Aufsichtsrats: Christoph Vilanek
-                </div>
-            `;
-
-        const englishFooter = `
-                <div style=\"margin: 0; font-size: 10px; color: gray;\">
-                    EXARING AG, Leopoldstrasse 236, 80807 Munich, Germany<br>
-                    Executive Board: Christoph Bellmer, Markus Haertenstein, Robert Laier | District Court of Munich, HRB 205601<br>
-                    Chairman of the Supervisory Board: Christoph Vilanek
-                </div>
-            `;
-
-        const footer = language === 'de' ? germanFooter : englishFooter;
-
-
-        const signatureHTML = `
-                <div style=\"font-family: Arial, sans-serif; font-size: 12px; line-height: 1.2;\">
-                    <div style=\"margin: 0;\">
-                        --<br>
-                        <span style=\"font-size: 14px; font-weight: bold;\">${firstname} ${lastname}</span> ${titleDepartment ? '| ' + titleDepartment : ''}<br>
-                        <a href=\"mailto:${email}\" style=\"color: #000000; text-decoration: none;\">${email}</a><br>
-                        ${phoneLink}
+<div class="container mt-5">
+    <h1 class="text-center mb-4">Signature Generator</h1>
+    <div class="row justify-content-center">
+        <div class="col-lg-8 col-md-10">
+            <form>
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label for="firstname" class="form-label">First Name *</label>
+                        <input type="text" id="firstname" class="form-control" placeholder="Enter your first name" required>
                     </div>
-                    <div style=\"margin: 5px 0;\">
-                        <img src=\"https://exaring.github.io/logos/waipu.png\"
-                             alt=\"waipu.tv Logo\" style=\"height: 26px; display: inline-block;\">
-                    </div>
-                    ${footer}
-                    <div style=\"margin: 5px 0; font-size: 10px;\">
-                        <a href=\"https://www.exaring.de\" style=\"color: #0000EE; text-decoration: none;\">www.exaring.de</a> |
-                        <a href=\"https://www.waipu.tv\" style=\"color: #0000EE; text-decoration: none;\">www.waipu.tv</a>
+                    <div class="col-md-6">
+                        <label for="lastname" class="form-label">Last Name *</label>
+                        <input type="text" id="lastname" class="form-control" placeholder="Enter your last name" required>
                     </div>
                 </div>
-            `;
-        document.getElementById('signature-output').innerHTML = signatureHTML;
-        document.getElementById('signature-container').style.display = 'block';
-        document.getElementById('html-output').innerText = signatureHTML;
-        document.getElementById('html-container').style.display = 'block';
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label for="email" class="form-label">Email *</label>
+                        <input type="email" id="email" class="form-control" placeholder="example@domain.com" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="phone" class="form-label">Phone</label>
+                        <input type="tel" id="phone" class="form-control" placeholder="+49 123 4567890">
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label for="title" class="form-label">Title</label>
+                        <input type="text" id="title" class="form-control" placeholder="Your Job Title">
+                    </div>
+                    <div class="col-md-6">
+                        <label for="department" class="form-label">Department</label>
+                        <input type="text" id="department" class="form-control" placeholder="e.g., Engineering">
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label for="language" class="form-label">Language</label>
+                    <select id="language" class="form-select form-select-sm w-50">
+                        <option value="de">German</option>
+                        <option value="en">English</option>
+                    </select>
+                </div>
+                <div class="d-flex justify-content-between">
+                    <button type="button" class="btn btn-primary" onclick="signIn()">Sign in with Office 365</button>
+                    <button type="button" class="btn btn-success" onclick="generateSignature()">Generate Signature</button>
+                </div>
+            </form>
+        </div>
+    </div>
 
-        const textOnlySignature = document.getElementById('signature-output').innerText;
-        document.getElementById('text-only-output').innerText = textOnlySignature;
-        document.getElementById('text-container').style.display = 'block';
-    }
-</script>
-<script>
-    function copyToClipboard(elementId) {
-        const content = document.getElementById(elementId).innerText;
-        navigator.clipboard.writeText(content).then(() => {
-            alert('Content copied to clipboard!');
-        }).catch(err => {
-            alert('Failed to copy content: ' + err);
-        });
-    }
-    function copyToClipboardRich(elementId) {
-        const element = document.getElementById(elementId);
-        const html = element.outerHTML;
+    <div id="signature-container" class="mt-5" style="display: none;">
+        <h3>Signature</h3>
+        <div id="signature-output" class="output" contenteditable="true"></div>
+        <button class="btn btn-outline-secondary mt-3" onclick="copyToClipboardRich('signature-output')">Copy</button>
+    </div>
 
-        const clipboardItem = new ClipboardItem({
-            'text/html': new Blob([html], { type: 'text/html' }),
-            'text/plain': new Blob([element.innerText], { type: 'text/plain' })
-        });
+    <div id="html-container" class="mt-5" style="display: none;">
+        <h3>HTML Code</h3>
+        <div id="html-output" class="output" contenteditable="true" style="white-space: pre-wrap; font-size: 10px; line-height: 1.2;"></div>
+        <button class="btn btn-outline-secondary mt-3" onclick="copyToClipboard('html-output')">Copy</button>
+    </div>
 
-        navigator.clipboard.write([clipboardItem])
-            .then(() => alert('Content copied to clipboard!'))
-            .catch(error => alert('Failed to copy content: ' + error));
-    }
-</script>
-<script>
-    const msalConfig = {
-        auth: {
-            clientId: "2a0d49d5-3f9a-4c80-8e21-4670bf6f53b3",
-            authority: "https://login.microsoftonline.com/exaring.de",
-            redirectUri: "https://exaring.github.io/logos/signature.html",
-        },
-    };
+    <div id="text-container" class="mt-5" style="display: none;">
+        <h3>Text only</h3>
+        <div id="text-only-output" class="output" contenteditable="true" style="white-space: pre-wrap; font-size: 10px; line-height: 1.2;"></div>
+        <button class="btn btn-outline-secondary mt-3" onclick="copyToClipboard('text-only-output')">Copy</button>
+    </div>
+</div>
 
-    const loginRequest = {
-        scopes: ["User.Read"],
-    };
-
-    const msalInstance = new msal.PublicClientApplication(msalConfig);
-
-    function signIn() {
-        msalInstance.loginPopup(loginRequest)
-            .then(response => {
-                const account = msalInstance.getAllAccounts()[0];
-                if (account) {
-                    msalInstance.setActiveAccount(account);
-                    console.log("Signed in:", account);
-                    getUserData();
-                }
-            })
-            .catch(error => {
-                console.error("Login error:", error);
-            });
-    }
-
-    function getUserData() {
-        msalInstance.acquireTokenSilent(loginRequest)
-            .then(tokenResponse => {
-                fetch("https://graph.microsoft.com/v1.0/me?$select=givenName,surname,mail,jobTitle,department,mobilePhone", {
-                    headers: {
-                        Authorization: `Bearer ${tokenResponse.accessToken}`,
-                    },
-                })
-                    .then(response => response.json())
-                    .then(data => {
-                        console.log("User Data:", data);
-                        document.getElementById("firstname").value = data.givenName || "";
-                        document.getElementById("lastname").value = data.surname || "";
-                        document.getElementById("email").value = data.mail || "";
-                        document.getElementById("title").value = data.jobTitle || "";
-                        document.getElementById("department").value = data.department || "";
-                        document.getElementById('phone').value = data.mobilePhone || "";
-                    })
-                    .catch(error => {
-                        console.error("Graph API error:", error);
-                    });
-            })
-            .catch(error => {
-                console.error("Token acquisition error:", error);
-            });
-    }
-</script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 
 </body>
 </html>
