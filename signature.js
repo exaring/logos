@@ -80,7 +80,7 @@ function generateSignature() {
     const germanFooter = `
                 <div style=\"margin: 0; font-size: 10px; color: gray;\">
                     EXARING AG, Leopoldstraße 236, 80807 München<br>
-                    Vorstand: Christoph Bellmer, Markus Haertenstein, Robert Laier | Amtsgericht München, HRB 205601<br>
+                    Vorstand: Christoph Bellmer, Markus Härtenstein, Robert Laier | Amtsgericht München, HRB 205601<br>
                     Vorsitzender des Aufsichtsrats: Christoph Vilanek
                 </div>
             `;
@@ -88,7 +88,7 @@ function generateSignature() {
     const englishFooter = `
                 <div style=\"margin: 0; font-size: 10px; color: gray;\">
                     EXARING AG, Leopoldstrasse 236, 80807 Munich, Germany<br>
-                    Executive Board: Christoph Bellmer, Markus Haertenstein, Robert Laier | District Court of Munich, HRB 205601<br>
+                    Executive Board: Christoph Bellmer, Markus Härtenstein, Robert Laier | District Court of Munich, HRB 205601<br>
                     Chairman of the Supervisory Board: Christoph Vilanek
                 </div>
             `;
