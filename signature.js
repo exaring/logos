@@ -106,7 +106,7 @@ function generateSignature() {
                     </div>
                     <div style=\"margin: 5px 0;\">
                         <img src=\"https://exaring.github.io/logos/waipu.png\"
-                             alt=\"waipu.tv Logo\" style=\"height: 26px; display: inline-block;\">
+                             alt=\"waipu.tv Logo\" height="26" style=\"height: 26px; display: inline-block;\">
                     </div>
                     ${footer}
                     <div style=\"margin: 5px 0; font-size: 10px;\">
