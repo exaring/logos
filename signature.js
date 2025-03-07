@@ -105,13 +105,13 @@ function generateSignature() {
                         ${phoneLink}
                     </div>
                     <div style=\"margin: 5px 0;\">
-                        <img src=\"https://exaring.github.io/logos/waipu.png\"
+                        <img src=\"/waipu-tv-logo-dunkel@3x.png\"
                              alt=\"waipu.tv Logo\" style=\"height: 26px; display: inline-block;\">
                     </div>
                     ${footer}
                     <div style=\"margin: 5px 0; font-size: 10px;\">
-                        <a href=\"https://www.exaring.de\" style=\"color: #0000EE; text-decoration: none;\">www.exaring.de</a> |
-                        <a href=\"https://www.waipu.tv\" style=\"color: #0000EE; text-decoration: none;\">www.waipu.tv</a>
+                        <a href=\"https://www.exaring.de\" style=\"color: #2789FC; text-decoration: none;\">www.exaring.de</a> |
+                        <a href=\"https://www.waipu.tv\" style=\"color: #2789FC; text-decoration: none;\">www.waipu.tv</a>
                     </div>
                 </div>
             `;
