@@ -105,7 +105,7 @@ function generateSignature() {
                         ${phoneLink}
                     </div>
                     <div style=\"margin: 5px 0;\">
-                        <img src=\"/waipu-tv-logo-dunkel@3x.png\"
+                        <img src=\"https://exaring.github.io/logos/waipu.png\"
                              alt=\"waipu.tv Logo\" style=\"height: 26px; display: inline-block;\">
                     </div>
                     ${footer}
